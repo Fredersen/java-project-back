@@ -50,6 +50,18 @@ public class ClassController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @GetMapping("/school/{id}")
+    public ResponseEntity<List<Class>> getClassesBySchoolId(@PathVariable("id") Long id) {
+        Optional<School> schoolOpt = schoolRepository.findById(id);
+        if (schoolOpt.isPresent()) {
+            School school = schoolOpt.get();
+            List<Class> classes = classRepository.findAllBySchool(school);
+            return new ResponseEntity<>(classes, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Class> deleteClass(@PathVariable("id") Long id) {
         Optional<Class> classOpt = classRepository.findById(id);
