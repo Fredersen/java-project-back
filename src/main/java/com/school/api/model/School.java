@@ -2,7 +2,9 @@ package com.school.api.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -18,8 +20,9 @@ public class School {
     
     private String type;
 
-    @OneToMany(mappedBy = "school", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Class> classes = new HashSet<>();
+
+    @OneToMany(mappedBy = "school", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Class> classes = new ArrayList<>();
     
     public School(String name, String city, String type) {
         this.name = name;
@@ -59,17 +62,7 @@ public class School {
         this.type = type;
     }
 
-    public Set<Class> getClasses() {
-        return classes;
-    }
-
-    public void addClass(Class clazz) {
-        classes.add(clazz);
-        clazz.setSchool(this);
-    }
-
-    public void removeClass(Class clazz) {
-        classes.remove(clazz);
-        clazz.setSchool(null);
+    public void setClasses(List<Class> classes) {
+        this.classes = classes;
     }
 }

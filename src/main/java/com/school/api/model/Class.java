@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 public class Class {
 
@@ -19,6 +22,9 @@ public class Class {
     @JoinColumn(name = "school_id")
     @JsonIgnore
     private School school;
+
+    @OneToMany(mappedBy = "classRoom", cascade = CascadeType.REMOVE)
+    private List<Student> students = new ArrayList<>();
 
     public Class(String name, String level, School school) {
         this.name = name;
@@ -60,5 +66,9 @@ public class Class {
     @JsonProperty("schoolId")
     public Long getSchoolId() {
         return (school != null) ? school.getId() : null;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
     }
 }
