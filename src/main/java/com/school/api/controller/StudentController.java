@@ -54,6 +54,22 @@ public class StudentController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @GetMapping("/class/{id}")
+    public ResponseEntity<Page<Student>> getStudentsByClassId(
+            @PathVariable("id") Long id,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int limit) {
+        Optional<Class> classOpt = classRepository.findById(id);
+        if (classOpt.isPresent()) {
+            Class classObj = classOpt.get();
+            Pageable pageable = PageRequest.of(page, limit);
+            Page<Student> students = studentRepository.findAllByClassRoom(classObj, pageable);
+            return new ResponseEntity<>(students, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Student> deleteStudent(@PathVariable("id") Long id) {
         Optional<Student> studentOpt = studentRepository.findById(id);

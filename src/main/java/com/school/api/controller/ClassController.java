@@ -51,12 +51,16 @@ public class ClassController {
     }
 
     @GetMapping("/school/{id}")
-    public ResponseEntity<List<Class>> getClassesBySchoolId(@PathVariable("id") Long id) {
+    public ResponseEntity<Page<Class>> getClassesBySchoolId(
+            @PathVariable("id") Long id,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int limit) {
         Optional<School> schoolOpt = schoolRepository.findById(id);
         if (schoolOpt.isPresent()) {
             School school = schoolOpt.get();
-            List<Class> classes = classRepository.findAllBySchool(school);
-            return new ResponseEntity<>(classes, HttpStatus.OK);
+            Pageable pageable = PageRequest.of(page, limit);
+            Page<Class> classesPage = classRepository.findAllBySchool(school, pageable);
+            return new ResponseEntity<>(classesPage, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

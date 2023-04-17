@@ -1,5 +1,6 @@
 package com.school.api.repository;
 
+import com.school.api.model.Class;
 import com.school.api.model.Student;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,4 +16,6 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
             "LOWER(s.firstName) LIKE %:search% OR " +
             "LOWER(s.lastName) LIKE %:search% ")
     Page<Student> searchAllFields(@Param("search") String search, Pageable pageable);
+
+    Page<Student> findAllByClassRoom(Class classObj, Pageable pageable);
 }

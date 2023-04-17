@@ -19,5 +19,5 @@ public interface ClassRepository extends JpaRepository<Class, Long> {
             "LOWER(c.level) LIKE %:search% ")
     Page<Class> searchAllFields(@Param("search") String search, Pageable pageable);
 
-    List<Class> findAllBySchool(School school);
+    Page<Class> findAllBySchool(School school, Pageable pageable);
 }
